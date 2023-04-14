@@ -211,25 +211,25 @@ while running:
 
     # Update the simulation (tree agents and resource field)
     if timer % (TICKS_PER_HOUR * .025) == 0:  # Every 6 hours
-        # ... (rest of the energy field calculation and tree growth logic)
-        sun_position = timer // (TICKS_PER_HOUR * 6) % 4
-        if sun_position == 0:
-            energy_field[:, :] = 1
-        elif sun_position == 1:
-            energy_field[:, :] = np.linspace(0, 1, WIDTH // 10)
-        elif sun_position == 2:
-            energy_field[:, :] = 0
-        else:
-            energy_field[:, :] = np.linspace(1, 0, WIDTH // 10)
+        # # ... (rest of the energy field calculation and tree growth logic)
+        # sun_position = timer // (TICKS_PER_HOUR * 6) % 4
+        # if sun_position == 0:
+        #     energy_field[:, :] = 1
+        # elif sun_position == 1:
+        #     energy_field[:, :] = np.linspace(0, 1, WIDTH // 10)
+        # elif sun_position == 2:
+        #     energy_field[:, :] = 0
+        # else:
+        #     energy_field[:, :] = np.linspace(1, 0, WIDTH // 10)
         
         # for tree in trees:
 
-        # Update the energy field based on the selected distance metric
-       # energy_field = generate_distance_field(distance_metrics[distance_metric_index])
+        #Update the energy field based on the selected distance metric
+       energy_field = generate_distance_field(distance_metrics[distance_metric_index])
 
-        for tree in trees:
-            tree.grow(energy_field, occupied_space)
-            tree.update_occupied_space(occupied_space)
+    for tree in trees:
+        tree.grow(energy_field, occupied_space)
+        tree.update_occupied_space(occupied_space)
 
     # Render the scene
     screen.fill((255, 255, 255))  # Clear the screen with a white background
