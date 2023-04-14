@@ -97,7 +97,7 @@ class Tree:
 
     scalefactor = 2
 
-    def __init__(self, position, growth_rate=10):
+    def __init__(self, position, growth_rate=100):
         self.position = position
         self.branches = []
         self.energy = 0
@@ -210,22 +210,22 @@ while running:
     growth_rate = growth_rate_slider.get_current_value()
 
     # Update the simulation (tree agents and resource field)
-    if timer % (TICKS_PER_HOUR * 6) == 0:  # Every 6 hours
-        # # ... (rest of the energy field calculation and tree growth logic)
-        # sun_position = timer // (TICKS_PER_HOUR * 6) % 4
-        # if sun_position == 0:
-        #     energy_field[:, :] = 1
-        # elif sun_position == 1:
-        #     energy_field[:, :] = np.linspace(0, 1, WIDTH // 10)
-        # elif sun_position == 2:
-        #     energy_field[:, :] = 0
-        # else:
-        #     energy_field[:, :] = np.linspace(1, 0, WIDTH // 10)
+    if timer % (TICKS_PER_HOUR * .025) == 0:  # Every 6 hours
+        # ... (rest of the energy field calculation and tree growth logic)
+        sun_position = timer // (TICKS_PER_HOUR * 6) % 4
+        if sun_position == 0:
+            energy_field[:, :] = 1
+        elif sun_position == 1:
+            energy_field[:, :] = np.linspace(0, 1, WIDTH // 10)
+        elif sun_position == 2:
+            energy_field[:, :] = 0
+        else:
+            energy_field[:, :] = np.linspace(1, 0, WIDTH // 10)
         
         # for tree in trees:
 
         # Update the energy field based on the selected distance metric
-        energy_field = generate_distance_field(distance_metrics[distance_metric_index])
+       # energy_field = generate_distance_field(distance_metrics[distance_metric_index])
 
         for tree in trees:
             tree.grow(energy_field, occupied_space)
