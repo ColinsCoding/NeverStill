@@ -48,8 +48,14 @@ def update(frame):
     ax.relim()
     ax.autoscale_view()
 
+    print(f"Prey: {prey_population}")
+    print(f"Predator: {predator_population}")
+
 # Create the animation
 animation = FuncAnimation(fig, update, frames=range(1000000), repeat=False)
 
 # Show the plot
-plt.show()
+plt.show() 
+
+
+
