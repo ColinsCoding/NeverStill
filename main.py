@@ -2,6 +2,7 @@ import pygame
 import pygame_gui
 import numpy as np
 from scipy.spatial.distance import cdist
+from scipy.ndimage import gaussian_filter
 
 
 # Screen dimensions
@@ -24,8 +25,6 @@ pygame.display.set_caption("Tree Growth Simulation")
 
 # Initialize Pygame GUI manager
 gui_manager = pygame_gui.UIManager((WIDTH, HEIGHT))
-
-
 
 
 # Create slider and checkboxes
@@ -64,7 +63,7 @@ energy_field_button = pygame_gui.elements.UIButton(
 
 
 # 
-def generate_energy_field(config):
+def generate_energy_field(config, sigma=1.0):
     energy_field = np.zeros((HEIGHT // 10, WIDTH // 10))
 
     if config == "uniform":
@@ -74,6 +73,9 @@ def generate_energy_field(config):
     elif config == "gradient_vertical":
         for i in range(HEIGHT // 10):
             energy_field[i, :] = i / (HEIGHT // 10)
+    elif config == "random":
+        energy_field = np.random.rand(HEIGHT // 10, WIDTH // 10)
+        energy_field = gaussian_filter(energy_field, sigma=sigma)
 
     return energy_field
 
@@ -89,6 +91,31 @@ def generate_distance_field(metric):
     return energy_field
 
 
+class Tree:
+
+    scalefactor = 2
+
+    def __init__(self, position, max_branches=1000, growth_rate=100):
+        self.position = position
+        self.branches = []
+        self.energy = 0
+        self.growth_rate = growth_rate
+        self.direction = None
+        self.length = 0
+        self.max_branches = max_branches
+
+    # ... other methods here ...
+
+    def grow(self, energy_field, occupied_space):
+        num_branches = len(self.branches)
+        # Apply the logistic growth model to adjust the growth rate
+        adjusted_growth_rate = self.growth_rate * num_branches * (1 - num_branches / self.max_branches)
+        
+        self.energy += adjusted_growth_rate * energy_field[int(self.position[1]) // 10, int(self.position[0]) // 10]
+
+        # ... rest of the method here ...
+
+
 
 
 # ... (rest of the Tree class implementation)
@@ -97,13 +124,14 @@ class Tree:
 
     scalefactor = 2
 
-    def __init__(self, position, growth_rate=100):
+    def __init__(self, position, max_branches=1000, growth_rate=100):
         self.position = position
         self.branches = []
         self.energy = 0
         self.growth_rate = growth_rate
         self.direction = None
         self.length = 0
+        self.max_branches = max_branches
 
     def get_energy_gradient(self, energy_field):
         y, x = int(self.position[1]) // 10, int(self.position[0]) // 10
@@ -120,6 +148,7 @@ class Tree:
 
         for branch in self.branches:
             branch.update_occupied_space(occupied_space)
+
 
     def grow(self, energy_field, occupied_space):
         self.energy += self.growth_rate * energy_field[int(self.position[1]) // 10, int(self.position[0]) // 10]
@@ -182,10 +211,6 @@ running = True
 clock = pygame.time.Clock()
 while running:
     time_delta = clock.tick(60) / 1000.0
-
-    
-
-
         # Process events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -225,7 +250,8 @@ while running:
         # for tree in trees:
 
         #Update the energy field based on the selected distance metric
-       energy_field = generate_distance_field(distance_metrics[distance_metric_index])
+        energy_field = generate_energy_field('random', sigma=1.0)
+       #energy_field = generate_distance_field(distance_metrics[distance_metric_index])
 
     for tree in trees:
         tree.grow(energy_field, occupied_space)

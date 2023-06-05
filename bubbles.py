@@ -34,6 +34,7 @@ clock = pygame.time.Clock()
 # set up the bubbles
 bubbles = []
 
+
 # main loop
 while True:
     # event handling
