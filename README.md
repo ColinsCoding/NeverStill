@@ -11,3 +11,7 @@ Fractals and L-systems
 Gradient Descent based 
 Evolutionary Algorithms 
 
+
+references
+boids https://vergenet.net/~conrad/boids/pseudocode.html
+
