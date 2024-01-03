@@ -15,3 +15,8 @@ Evolutionary Algorithms
 references
 boids https://vergenet.net/~conrad/boids/pseudocode.html
 
+PruneGame 
+2-D growth in a puzzle game 
+https://twitter.com/mcdjoel
+https://twitter.com/mcdjoel
+
